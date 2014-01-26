@@ -21,6 +21,7 @@
 		2E30DEE9188BCCFC00882F2C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E30DECB188BCCFB00882F2C /* UIKit.framework */; };
 		2E30DEF1188BCCFC00882F2C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2E30DEEF188BCCFC00882F2C /* InfoPlist.strings */; };
 		2E30DEF3188BCCFC00882F2C /* CoverFlowViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E30DEF2188BCCFC00882F2C /* CoverFlowViewTests.m */; };
+		2E30DEFE188BCD3600882F2C /* CoverFlowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E30DEFD188BCD3600882F2C /* CoverFlowView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,8 @@
 		2E30DEEE188BCCFC00882F2C /* CoverFlowViewTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "CoverFlowViewTests-Info.plist"; sourceTree = "<group>"; };
 		2E30DEF0188BCCFC00882F2C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		2E30DEF2188BCCFC00882F2C /* CoverFlowViewTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CoverFlowViewTests.m; sourceTree = "<group>"; };
+		2E30DEFC188BCD3600882F2C /* CoverFlowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoverFlowView.h; sourceTree = "<group>"; };
+		2E30DEFD188BCD3600882F2C /* CoverFlowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoverFlowView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +115,8 @@
 		2E30DECD188BCCFB00882F2C /* CoverFlowView */ = {
 			isa = PBXGroup;
 			children = (
+				2E30DEFC188BCD3600882F2C /* CoverFlowView.h */,
+				2E30DEFD188BCD3600882F2C /* CoverFlowView.m */,
 				2E30DED6188BCCFB00882F2C /* AppDelegate.h */,
 				2E30DED7188BCCFB00882F2C /* AppDelegate.m */,
 				2E30DED9188BCCFB00882F2C /* Main.storyboard */,
@@ -249,6 +254,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2E30DEFE188BCD3600882F2C /* CoverFlowView.m in Sources */,
 				2E30DEDE188BCCFB00882F2C /* ViewController.m in Sources */,
 				2E30DED8188BCCFB00882F2C /* AppDelegate.m in Sources */,
 				2E30DED4188BCCFB00882F2C /* main.m in Sources */,
