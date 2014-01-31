@@ -13,6 +13,9 @@
 {
     //画像格納用
     NSMutableArray *imgViewArray;
+    //鏡面画像格納用
+    NSMutableArray *mirrorArray;
+    
     //スクロール位置に近い画像の番号
     int championNumber;
     
@@ -45,10 +48,33 @@
     int cnt = [imgArray count];
     CGFloat width= 0;
     imgViewArray = [NSMutableArray array];
+    mirrorArray = [NSMutableArray array];
     
+    CATransform3D perspectiveTransform = CATransform3DIdentity;
+    //奥行き感設定
+    perspectiveTransform.m34 = 1.0 / -300;
+    self.layer.sublayerTransform = perspectiveTransform;
+    
+    //画像と位置の設定
     for (int i = 0; i< cnt; i++) {
         if ([imgArray[i] isKindOfClass:[UIImage class]]) {
             UIImageView *imgView = [[UIImageView alloc]initWithImage:imgArray[i]];
+            //鏡面画像
+            CALayer *layer = [CALayer layer];
+            layer.frame = CGRectMake(0, 0, ((UIImage *)imgArray[i]).size.width, ((UIImage *)imgArray[i]).size.height);
+            
+//            UIImage *mirror = [UIImage imageWithCGImage:((UIImage *)imgArray[i]).CGImage scale:((UIImage *)imgArray[i]).scale orientation:UIImageOrientationDownMirrored];
+            
+//            UIImageView *vi = [[UIImageView alloc]initWithImage:mirror];
+//            [self addSubview:vi];
+            
+            
+            
+            
+            layer.contents = ((id)((UIImage *)imgArray[i]).CGImage);
+            layer.opacity = 0.3f;
+            layer.transform = CATransform3DMakeRotation(180.0f/180.0f*M_PI, 1.0f, 0.0f, 0);
+            
             //viewの識別
             imgView.tag = i+1;
             
@@ -60,22 +86,24 @@
             }
             
             imgView.center = CGPointMake(width, ((UIImage *)imgArray[i]).size.height/2);
+            layer.position = CGPointMake(width, ((UIImage *)imgArray[i]).size.height*3/2);
             
             [self addSubview:imgView];
+            [self.layer addSublayer:layer];
             [imgViewArray addObject:imgView];
+            [mirrorArray addObject:layer];
             imgView = nil;
+            layer = nil;
         }
-        
-        CATransform3D perspectiveTransform = CATransform3DIdentity;
-        //奥行き感設定
-        perspectiveTransform.m34 = 1.0 / -300;
-        self.layer.sublayerTransform = perspectiveTransform;
     }
     
     //スクロール範囲
     self.contentSize = CGSizeMake(width + self.frame.size.width/2,self.frame.size.height);
     
+    [self setInitPosition:0];
+    
 }
+
 
 
 //画像の初期位置設定
@@ -88,6 +116,7 @@
     
     int cnt = [imgViewArray count];
     
+    //スクロール位置設定
     for (int i = 0; i< cnt; i++) {
         
         if (((UIImageView *)imgViewArray[i]).tag == initPosition +1) {
@@ -96,12 +125,15 @@
         }
     }
     
+    //角度の設定
     for (int i=0; i < cnt; i++) {
         
         if (i < initPosition) {
             [self transformView:(UIImageView *)imgViewArray[i] angle:60.0f];
+            [self transformMirrorView:(CALayer *)mirrorArray[i] angle:60.0f];
         }else if(i > initPosition) {
             [self transformView:(UIImageView *)imgViewArray[i] angle:-60.0f];
+            [self transformMirrorView:(CALayer *)mirrorArray[i] angle:-60.0f];
         }
     }
     
@@ -114,6 +146,16 @@
     view.layer.transform = CATransform3DMakeRotation(rad/180.0f*M_PI, 0.0f, 1.0f, 0.0f);
     view.layer.zPosition = -100;
 }
+
+//鏡面画像の変形
+-(void)transformMirrorView:(CALayer *)layer angle:(float)rad
+{
+    layer.transform = CATransform3DMakeRotation(180.0f/180.0f*M_PI, 1.0f, 0.0f, 0.0f);
+    layer.transform = CATransform3DRotate(layer.transform, -rad/180.0f*M_PI, 0.0f, 1.0f, 0.0f);
+    layer.zPosition = -100;
+    
+}
+
 
 
 //タップイベント
@@ -148,12 +190,15 @@
         }
     }
     
+    
+    
     for (int i = 0; i< cnt; i++) {
         
         if (championNumber < i) {
             
             [UIView animateWithDuration:0.1f animations:^{
                 [self transformView:(UIImageView *)imgViewArray[i] angle:-60.0f];
+                [self transformMirrorView:(CALayer *)mirrorArray[i] angle:-60.0f];
             } completion:^(BOOL finished) {
                 
             }];
@@ -162,6 +207,7 @@
         }else if(championNumber > i) {
             [UIView animateWithDuration:0.1f animations:^{
                 [self transformView:(UIImageView *)imgViewArray[i] angle:60.0f];
+                [self transformMirrorView:(CALayer *)mirrorArray[i] angle:60.0f];
             } completion:^(BOOL finished) {
                 
             }];
@@ -177,6 +223,10 @@
     [UIView animateWithDuration:0.1f animations:^{
         ((UIImageView *)imgViewArray[championNumber]).layer.transform = CATransform3DMakeRotation(0, 0.0f, 1.0f, 0.0f);
         ((UIImageView *)imgViewArray[championNumber]).layer.zPosition = 0;
+        
+        ((CALayer *)mirrorArray[championNumber]).transform = CATransform3DMakeRotation(200.0f/180.0f*M_PI, 1.0f, 0.0f, 0.0f);
+        ((CALayer *)mirrorArray[championNumber]).zPosition = 0;
+        
     } completion:^(BOOL finished) {
         
     }];

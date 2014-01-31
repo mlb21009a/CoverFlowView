@@ -20,7 +20,7 @@
 	// Do any additional setup after loading the view, typically from a nib.
     _coverFlow.imgArray = @[[
                              UIImage imageNamed:@"Image"],[UIImage imageNamed:@"Image"], [UIImage imageNamed:@"Image"],[UIImage imageNamed:@"Image"],[UIImage imageNamed:@"Image"],[UIImage imageNamed:@"Image"],[UIImage imageNamed:@"Image"],[UIImage imageNamed:@"Image"],[UIImage imageNamed:@"Image"],[UIImage imageNamed:@"Image"],[UIImage imageNamed:@"Image"],[UIImage imageNamed:@"Image"]];
-    _coverFlow.initPosition = 5;
+//    _coverFlow.initPosition = 5;
     
     _coverFlow.coverFolwDelegate = self;
     
