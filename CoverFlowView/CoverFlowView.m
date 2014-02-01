@@ -13,8 +13,6 @@
 {
     //画像格納用
     NSMutableArray *imgViewArray;
-    //鏡面画像格納用
-    NSMutableArray *mirrorArray;
     
     //スクロール位置に近い画像の番号
     int championNumber;
@@ -48,7 +46,6 @@
     int cnt = [imgArray count];
     CGFloat width= 0;
     imgViewArray = [NSMutableArray array];
-    mirrorArray = [NSMutableArray array];
     
     CATransform3D perspectiveTransform = CATransform3DIdentity;
     //奥行き感設定
@@ -68,9 +65,7 @@
 //            UIImageView *vi = [[UIImageView alloc]initWithImage:mirror];
 //            [self addSubview:vi];
             
-            
-            
-            
+            //鏡面画像設定
             layer.contents = ((id)((UIImage *)imgArray[i]).CGImage);
             layer.opacity = 0.3f;
             layer.transform = CATransform3DMakeRotation(180.0f/180.0f*M_PI, 1.0f, 0.0f, 0);
@@ -86,12 +81,11 @@
             }
             
             imgView.center = CGPointMake(width, ((UIImage *)imgArray[i]).size.height/2);
-            layer.position = CGPointMake(width, ((UIImage *)imgArray[i]).size.height*3/2);
+            layer.position = CGPointMake(imgView.layer.frame.size.width/2, imgView.layer.position.y + imgView.layer.frame.size.height + 5.0f);
             
             [self addSubview:imgView];
-            [self.layer addSublayer:layer];
+            [imgView.layer addSublayer:layer];
             [imgViewArray addObject:imgView];
-            [mirrorArray addObject:layer];
             imgView = nil;
             layer = nil;
         }
@@ -99,8 +93,7 @@
     
     //スクロール範囲
     self.contentSize = CGSizeMake(width + self.frame.size.width/2,self.frame.size.height);
-    
-    [self setInitPosition:0];
+    self.initPosition = 0;
     
 }
 
@@ -112,8 +105,6 @@
     
     //タップイベント検知設定
     ((UIImageView *)imgViewArray[initPosition]).userInteractionEnabled = YES;
-    
-    
     int cnt = [imgViewArray count];
     
     //スクロール位置設定
@@ -130,10 +121,8 @@
         
         if (i < initPosition) {
             [self transformView:(UIImageView *)imgViewArray[i] angle:60.0f];
-            [self transformMirrorView:(CALayer *)mirrorArray[i] angle:60.0f];
         }else if(i > initPosition) {
             [self transformView:(UIImageView *)imgViewArray[i] angle:-60.0f];
-            [self transformMirrorView:(CALayer *)mirrorArray[i] angle:-60.0f];
         }
     }
     
@@ -146,17 +135,6 @@
     view.layer.transform = CATransform3DMakeRotation(rad/180.0f*M_PI, 0.0f, 1.0f, 0.0f);
     view.layer.zPosition = -100;
 }
-
-//鏡面画像の変形
--(void)transformMirrorView:(CALayer *)layer angle:(float)rad
-{
-    layer.transform = CATransform3DMakeRotation(180.0f/180.0f*M_PI, 1.0f, 0.0f, 0.0f);
-    layer.transform = CATransform3DRotate(layer.transform, -rad/180.0f*M_PI, 0.0f, 1.0f, 0.0f);
-    layer.zPosition = -100;
-    
-}
-
-
 
 //タップイベント
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
@@ -198,7 +176,6 @@
             
             [UIView animateWithDuration:0.1f animations:^{
                 [self transformView:(UIImageView *)imgViewArray[i] angle:-60.0f];
-                [self transformMirrorView:(CALayer *)mirrorArray[i] angle:-60.0f];
             } completion:^(BOOL finished) {
                 
             }];
@@ -207,7 +184,6 @@
         }else if(championNumber > i) {
             [UIView animateWithDuration:0.1f animations:^{
                 [self transformView:(UIImageView *)imgViewArray[i] angle:60.0f];
-                [self transformMirrorView:(CALayer *)mirrorArray[i] angle:60.0f];
             } completion:^(BOOL finished) {
                 
             }];
@@ -223,9 +199,6 @@
     [UIView animateWithDuration:0.1f animations:^{
         ((UIImageView *)imgViewArray[championNumber]).layer.transform = CATransform3DMakeRotation(0, 0.0f, 1.0f, 0.0f);
         ((UIImageView *)imgViewArray[championNumber]).layer.zPosition = 0;
-        
-        ((CALayer *)mirrorArray[championNumber]).transform = CATransform3DMakeRotation(200.0f/180.0f*M_PI, 1.0f, 0.0f, 0.0f);
-        ((CALayer *)mirrorArray[championNumber]).zPosition = 0;
         
     } completion:^(BOOL finished) {
         

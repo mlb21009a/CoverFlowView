@@ -18,14 +18,20 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+    
+    //UIImageをセット
     _coverFlow.imgArray = @[[
                              UIImage imageNamed:@"Image"],[UIImage imageNamed:@"Image"], [UIImage imageNamed:@"Image"],[UIImage imageNamed:@"Image"],[UIImage imageNamed:@"Image"],[UIImage imageNamed:@"Image"],[UIImage imageNamed:@"Image"],[UIImage imageNamed:@"Image"],[UIImage imageNamed:@"Image"],[UIImage imageNamed:@"Image"],[UIImage imageNamed:@"Image"],[UIImage imageNamed:@"Image"]];
-//    _coverFlow.initPosition = 5;
+ 
+    //初期表示位置設定(設定しない場合は0となる)
+    _coverFlow.initPosition = 5;
     
+    //デリゲートタップイベント用
     _coverFlow.coverFolwDelegate = self;
     
 }
 
+//タップした時に呼ばれるデリゲート
 -(void)tapImage:(int)imgNumber
 {
     NSLog(@"%d", imgNumber);
